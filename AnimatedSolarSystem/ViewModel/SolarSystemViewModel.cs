@@ -19,10 +19,25 @@ namespace AnimatedSolarSystem.ViewModel
     public class SolarSystemViewModel
     {
 
-        public Canvas Canvas = new Canvas();
+        public Canvas Canvas;
+
+        public void NewCanvas()
+        {
+            this.Canvas = new Canvas();
+			Canvas.Background = Brushes.Black;
+		}
 
 
 
+		private double yPerspective;
 
-    }
+		public double YPerspective
+		{
+			get { return yPerspective; }
+			set { yPerspective = value; }
+		}
+
+
+
+	}
 }

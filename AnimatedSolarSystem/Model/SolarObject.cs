@@ -20,17 +20,19 @@ namespace AnimatedSolarSystem.Model
 		{
 			this.Distance = distanceFromTheSun;
 			this.Size = size;
-			this.Velocity = velocity; // Rotation
+			this.Velocity = velocity / 30; // Rotation
 
-			this.X0 = 350;
-			this.Y0 = 100;
-
-
+			this.X0 = 800;
+			this.Y0 = 400;
 
             Shape.Width = this.Size;
             Shape.Height = this.Size;
 
-            Shape.Fill = color;
+			Shape.StrokeThickness = 2;
+
+			Shape.Stroke = Brushes.White;
+			Shape.Fill = color;
+
         }
 
 		private double x;
@@ -98,7 +100,14 @@ namespace AnimatedSolarSystem.Model
 			set { velocity = value; }
 		}
 
-        
+		private bool front = true;
 
-    }
+		public bool Front
+		{
+			get { return front; }
+			set { front = value; }
+		}
+
+
+	}
 }
