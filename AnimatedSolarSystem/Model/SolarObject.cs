@@ -16,8 +16,9 @@ namespace AnimatedSolarSystem.Model
     public class SolarObject
     {
 		public Ellipse Shape = new Ellipse();
-		public SolarObject(int distanceFromTheSun, double velocity, int size, Brush color)
+		public SolarObject(string name, int distanceFromTheSun, double velocity, int size, Brush color)
 		{
+			this.Name = name;
 			this.Distance = distanceFromTheSun;
 			this.Size = size;
 			this.Velocity = velocity / 30; // Rotation
@@ -34,6 +35,15 @@ namespace AnimatedSolarSystem.Model
 			Shape.Fill = color;
 
         }
+
+		private string name;
+
+		public string Name
+		{
+			get { return name; }
+			set { name = value; }
+		}
+
 
 		private double x;
 

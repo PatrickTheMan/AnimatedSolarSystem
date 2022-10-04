@@ -3,19 +3,13 @@ using AnimatedSolarSystem.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace AnimatedSolarSystem.View
 {
@@ -31,14 +25,14 @@ namespace AnimatedSolarSystem.View
             this.DataContext = SolarSystemViewModel;
 		}
 
-        SolarObject Mercury = new SolarObject(75 + 50, 0.479, 10, Brushes.Gray);
-        SolarObject Venus = new SolarObject(100 + 50, 0.350, 20, Brushes.LightGoldenrodYellow);
-        SolarObject Earth = new SolarObject(130 + 50, 0.298, 20, Brushes.Blue);
-        SolarObject Mars = new SolarObject(155 + 50, 0.241, 10, Brushes.OrangeRed);
-		SolarObject Jupiter = new SolarObject(305 + 50, 0.131, 100, Brushes.Wheat);
-		SolarObject Saturn = new SolarObject(415 + 50, 0.97, 80, Brushes.SandyBrown);
-		SolarObject Uranus = new SolarObject(505 + 50, 0.68, 50, Brushes.WhiteSmoke);
-		SolarObject Neptun = new SolarObject(590 + 50, 0.54, 50, Brushes.LightBlue);
+        SolarObject Mercury = new SolarObject("Mercury", 75 + 50, 0.479, 10, Brushes.Gray);
+        SolarObject Venus = new SolarObject("Venus", 100 + 50, 0.350, 20, Brushes.LightGoldenrodYellow);
+        SolarObject Earth = new SolarObject("Earth", 130 + 50, 0.298, 20, Brushes.Blue);
+        SolarObject Mars = new SolarObject("Mars", 155 + 50, 0.241, 10, Brushes.OrangeRed);
+		SolarObject Jupiter = new SolarObject("Jupiter", 305 + 50, 0.131, 100, Brushes.Wheat);
+		SolarObject Saturn = new SolarObject("Saturn", 415 + 50, 0.97, 80, Brushes.SandyBrown);
+		SolarObject Uranus = new SolarObject("Uranus", 505 + 50, 0.68, 50, Brushes.WhiteSmoke);
+		SolarObject Neptun = new SolarObject("Neptun", 590 + 50, 0.54, 50, Brushes.LightBlue);
 
         List<SolarObject> SolarSystem;
         private void Create_Btn_Click(object sender, RoutedEventArgs e)
@@ -61,7 +55,7 @@ namespace AnimatedSolarSystem.View
 
 
 			SolarSystem.Add(Mercury);
-			//SolarSystem.Add(Venus);
+			SolarSystem.Add(Venus);
 			//SolarSystem.Add(Earth);
 			//SolarSystem.Add(Mars);
 			//SolarSystem.Add(Jupiter);
@@ -128,7 +122,7 @@ namespace AnimatedSolarSystem.View
 							if (!planet.Front)
 							{
 								planet.Front = true;
-								BringToFront(SolarSystemViewModel.Canvas, planet.Shape);
+								//BringToFront(SolarSystemViewModel.Canvas, planet.Shape);
 							}
 						} else if (Math.Sin(planet.Angle) % 1.5807 >= 0.99)
                         {
@@ -153,82 +147,27 @@ namespace AnimatedSolarSystem.View
             Dispatcher?.Invoke(action);
         }
 
-		public void BringToFront(Canvas pParent, Ellipse pToMove)
-		{
+		public void BringToBack(Canvas canvas, Ellipse ellipse)
+        {
 
-			int currentIndex = Canvas.GetZIndex(pToMove);
+            int skipNum = Canvas.GetZIndex(ellipse);
+			Canvas.SetZIndex(ellipse, 0);
 
-			int zIndex = 0;
-			int maxZ = 0;
-			Ellipse child;
-			for (int i = 0; i < pParent.Children.Count; i++)
-			{
-				Debug.WriteLine(pParent.Children[i].GetType());
+            Debug.WriteLine("My num: "+ Canvas.GetZIndex(ellipse));
 
-				if (pParent.Children[i] is Ellipse)
-				{
-					if (pParent.Children[i] != pToMove)
-					{
-						child = pParent.Children[i] as Ellipse;
-						zIndex = Canvas.GetZIndex(child);
-						maxZ = Math.Max(maxZ, zIndex);
-						if (zIndex > currentIndex)
-						{
-							Canvas.SetZIndex(child, zIndex - 1);
+			foreach (UIElement element in canvas.Children)
+            {
 
-							Debug.WriteLine(zIndex - 1);
-						}
-					} else
-					{
-						Debug.WriteLine("Dont move");
-					}
+                if (Canvas.GetZIndex(element) != skipNum + 1)
+                {
+					Canvas.SetZIndex(element, Canvas.GetZIndex(element) + 1);
 				}
-				else
-				{
-					Debug.WriteLine("Not a ellipse");
-				}
+
+				Debug.WriteLine("My other num: " + Canvas.GetZIndex(ellipse));
+
 			}
-			Canvas.SetZIndex(pToMove, maxZ);
-		}
 
-		public void BringToBack(Canvas pParent, Ellipse pToMove)
-		{
-
-			int currentIndex = Canvas.GetZIndex(pToMove);
-
-			int zIndex = 0;
-			int maxZ = 0;
-			Ellipse child;
-			for (int i = pParent.Children.Count - 1; i > 0; i--)
-			{
-				Debug.WriteLine(pParent.Children[i].GetType());
-
-				if (pParent.Children[i] is Ellipse)
-				{
-					if (pParent.Children[i] != pToMove)
-					{
-						child = pParent.Children[i] as Ellipse;
-						zIndex = Canvas.GetZIndex(child);
-						maxZ = Math.Max(maxZ, zIndex);
-						if (zIndex > currentIndex)
-						{
-							Canvas.SetZIndex(child, zIndex + 1);
-
-							Debug.WriteLine(zIndex + 1);
-						}
-					} else
-					{
-						Debug.WriteLine("Dont move");
-					}
-				}
-				else
-				{
-					Debug.WriteLine("Not a ellipse");
-				}
-			}
-			Canvas.SetZIndex(pToMove, maxZ);
-
-		}
+        }
 
 	}
 }
