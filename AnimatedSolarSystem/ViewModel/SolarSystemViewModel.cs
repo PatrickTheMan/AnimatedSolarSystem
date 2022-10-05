@@ -38,6 +38,5 @@ namespace AnimatedSolarSystem.ViewModel
 		}
 
 
-
-	}
+    }
 }
