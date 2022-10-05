@@ -56,21 +56,24 @@ namespace AnimatedSolarSystem.View
 
 			SolarSystem.Add(Mercury);
 			SolarSystem.Add(Venus);
-			//SolarSystem.Add(Earth);
-			//SolarSystem.Add(Mars);
-			//SolarSystem.Add(Jupiter);
-			//SolarSystem.Add(Saturn);
-			//SolarSystem.Add(Uranus);
-			//SolarSystem.Add(Neptun);
+			SolarSystem.Add(Earth);
+			SolarSystem.Add(Mars);
+			SolarSystem.Add(Jupiter);
+			SolarSystem.Add(Saturn);
+			SolarSystem.Add(Uranus);
+			SolarSystem.Add(Neptun);
 
 
-			Canvas.SetZIndex(Sun, 9);
+			Canvas.SetZIndex(Sun, 0);
 
-			int count = 8;
+			int count = 1;
 			foreach (SolarObject planet in SolarSystem)
             {
 				Canvas.SetZIndex(planet.Shape, count);
-				count--;
+				count++;
+
+                Debug.WriteLine("Count: "+count);
+
 				SolarSystemViewModel.Canvas.Children.Add(planet.Shape);
 			}
 
@@ -91,6 +94,11 @@ namespace AnimatedSolarSystem.View
 
         private void Dispatcher_Btn_Click(object sender, RoutedEventArgs e)
         {
+            if (tokenSource != null && tokenSource.Token.CanBeCanceled)
+            {
+                tokenSource.Cancel();
+            }
+
 			tokenSource = new CancellationTokenSource();
 			var task = Task.Run(() => MoveMyEllipse(tokenSource.Token));
 		}
@@ -101,7 +109,7 @@ namespace AnimatedSolarSystem.View
 		}
 
 
-		private CancellationTokenSource tokenSource;
+        private CancellationTokenSource tokenSource;
 
 
 
@@ -113,27 +121,28 @@ namespace AnimatedSolarSystem.View
                 foreach (var planet in SolarSystem)
                 {
                     planet.Angle = planet.Angle + planet.Velocity;
+                    planet.X = planet.X0 + planet.Distance * Math.Sin(planet.Angle);
+                    planet.Y = planet.Y0 + planet.Distance * Math.Cos(planet.Angle) * SolarSystemViewModel.YPerspective;
+
                     Invoke(() =>
                     {
-                        planet.X = planet.X0 + planet.Distance * Math.Sin(planet.Angle);
-
                         if (Math.Sin(planet.Angle) % 1.5807 <= -0.99)
                         {
-							if (!planet.Front)
-							{
-								planet.Front = true;
-								//BringToFront(SolarSystemViewModel.Canvas, planet.Shape);
-							}
-						} else if (Math.Sin(planet.Angle) % 1.5807 >= 0.99)
+                            if (!planet.Front)
+                            {
+                                planet.Front = true;
+                                FlipRender(planet.Shape);
+                            }
+                        }
+                        else if (Math.Sin(planet.Angle) % 1.5807 >= 0.99)
                         {
-							if (planet.Front)
-							{
-								planet.Front = false;
-								BringToBack(SolarSystemViewModel.Canvas, planet.Shape);
-							}
-						}
+                            if (planet.Front)
+                            {
+                                planet.Front = false;
+                                FlipRender(planet.Shape);
+                            }
+                        }
 
-                        planet.Y = planet.Y0 + planet.Distance * Math.Cos(planet.Angle) * SolarSystemViewModel.YPerspective;
                         planet.Shape.Margin = new Thickness(planet.X, planet.Y, 0, 0);
                     });
                 }
@@ -147,27 +156,13 @@ namespace AnimatedSolarSystem.View
             Dispatcher?.Invoke(action);
         }
 
-		public void BringToBack(Canvas canvas, Ellipse ellipse)
+		public void FlipRender(Ellipse ellipse)
         {
 
-            int skipNum = Canvas.GetZIndex(ellipse);
-			Canvas.SetZIndex(ellipse, 0);
-
-            Debug.WriteLine("My num: "+ Canvas.GetZIndex(ellipse));
-
-			foreach (UIElement element in canvas.Children)
-            {
-
-                if (Canvas.GetZIndex(element) != skipNum + 1)
-                {
-					Canvas.SetZIndex(element, Canvas.GetZIndex(element) + 1);
-				}
-
-				Debug.WriteLine("My other num: " + Canvas.GetZIndex(ellipse));
-
-			}
+            Canvas.SetZIndex(ellipse,-Canvas.GetZIndex(ellipse));
 
         }
 
-	}
+        
+    }
 }

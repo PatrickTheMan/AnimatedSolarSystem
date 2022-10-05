@@ -72,7 +72,7 @@
                 x:Name="ScrollBar_Y"
                 Grid.Column="1" Minimum="-1" Value="0" ValueChanged="ScrollBar_Y_ValueChanged"
                 >
-                
+
             </ScrollBar>
 
         </Grid>
