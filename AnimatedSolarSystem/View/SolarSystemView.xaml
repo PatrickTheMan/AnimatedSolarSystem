@@ -83,20 +83,27 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <Button
                 Grid.Column="0"
-                Content="Thread.Timer"
+                Content="Timer"
                 Click="ThreadTimer_Btn_Click">
 
             </Button>
 
             <Button
                 Grid.Column="1"
-                Content="Dispatcher"
+                Content="Thread + Dispatcher"
                 Click="Dispatcher_Btn_Click">
+
+            </Button>
+
+            <Button
+                Grid.Column="2"
+                Content="DispatchTimer"
+                Click="DispatcherTimer_Btn_Click">
 
             </Button>
 
