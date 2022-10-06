@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\PlanetOperations.cs" />
     <Compile Include="Model\SolarObject.cs" />
     <Compile Include="ViewModel\SolarSystemViewModel.cs" />
     <Compile Include="View\SolarSystemView.xaml.cs">
