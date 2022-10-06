@@ -90,6 +90,29 @@ namespace AnimatedSolarSystem.View
 				dispatcherTimer.Stop();
 			}
 
+		DispatcherTimer dispatcherTimer = new DispatcherTimer();
+		private void DispatcherTimer_Btn_Click(object sender, RoutedEventArgs e)
+        {
+			if (tokenSource != null && tokenSource.Token.CanBeCanceled)
+			{
+				tokenSource.Cancel();
+			}
+			if (timerThread != null)
+			{ // Stop Timer if running
+				timerThread.Dispose();
+				Debug.WriteLine("2");
+			}
+			if (dispatcherTimer.IsEnabled)
+			{ // Stop current DispatchTimer if running
+				dispatcherTimer.Stop();
+				Debug.WriteLine("3");
+			}
+			else
+			{ // Setup DispatchTimer
+				Debug.WriteLine("1");
+				dispatcherTimer.Tick += (sender2, e2) => { MoveMyPlanetDispatchTimer(tokenSource.Token); };
+				dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 25);
+			}
 			tokenSource = new CancellationTokenSource();
 
             // Start
