@@ -57,6 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="Model\PlanetOperations.cs" />
     <Compile Include="Model\SolarObject.cs" />
+    <Compile Include="Model\SolarSystemOperations.cs" />
     <Compile Include="ViewModel\SolarSystemViewModel.cs" />
     <Compile Include="View\SolarSystemView.xaml.cs">
       <DependentUpon>SolarSystemView.xaml</DependentUpon>
