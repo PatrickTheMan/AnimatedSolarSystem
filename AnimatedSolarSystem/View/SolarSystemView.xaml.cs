@@ -89,7 +89,6 @@ namespace AnimatedSolarSystem.View
 			{ // Stop current DispatchTimer if running
 				dispatcherTimer.Stop();
 			}
-
 			tokenSource = new CancellationTokenSource();
 
             // Start
